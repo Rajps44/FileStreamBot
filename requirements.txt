@@ -1,4 +1,3 @@
-pyofork 
 pymongo
 telethon
 cryptg
