@@ -2,10 +2,11 @@ from telethon import Button
 from telethon.events import NewMessage
 from telethon.tl.custom.message import Message
 from bot import TelegramBot
-from bot.config import Telegram
+from bot.config import Telegram ,VERIFY, VERIFY_TUTORIAL, BOT_USERNAME
 from bot.modules.static import *
 from bot.modules.decorators import verify_user
-from utils import verify_user, check_token
+from utils import verify_user, check_token , check_verification, get_token
+
 
 @TelegramBot.on(NewMessage(incoming=True, pattern=r'^/start$'))
 @verify_user(private=True)
