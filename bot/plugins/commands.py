@@ -1,4 +1,3 @@
-import datetime
 from telethon import Button
 from telethon.events import NewMessage
 from telethon.tl.custom.message import Message
@@ -6,31 +5,34 @@ from bot import TelegramBot
 from bot.config import Telegram
 from bot.modules.static import *
 from bot.modules.decorators import verify_user
+from utils import verify_user, check_token
 
 @TelegramBot.on(NewMessage(incoming=True, pattern=r'^/start$'))
 @verify_user(private=True)
 async def welcome(event: NewMessage.Event | Message):
     user_id = event.sender_id
-    user_data = Telegram.users_collection.find_one({"user_id": user_id})
-
-    # Agar user ka record pehle se hai, to 24 hours check karein
-    if user_data:
-        last_interaction = user_data['first_interaction']
-        current_time = datetime.datetime.now()
-        time_difference = current_time - last_interaction
-
-        # 24 hours (86400 seconds) se zyada ka difference check karte hain
-        if time_difference.total_seconds() > 86400:
-            await event.reply("Aapka 24-hour verification period khatam ho chuka hai. Kripya phir se start kariye.")
-            return
-    else:
-        # Agar user ka record nahi hai, to abhi ka time store karein
-        Telegram.users_collection.insert_one({
-            "user_id": user_id,
-            "first_interaction": datetime.datetime.now()
-        })
-
-    # Agar user authorized hai, to welcome message bheja jaye
+    data = message.command[1]
+    if data.split("-", 1)[0] == "verify": # set if or elif it depend on your code
+        userid = data.split("-", 2)[1]
+        token = data.split("-", 3)[2]
+        if str(message.from_user.id) != str(userid):
+            return await message.reply_text(
+                text="<b>Invalid link or Expired link !</b>",
+                protect_content=True
+            )
+        is_valid = await check_token(client, userid, token)
+        if is_valid == True:
+            await message.reply_text(
+                text=f"<b>Hey {message.from_user.mention}, You are successfully verified !\nNow you have unlimited access for all files till today midnight.</b>",
+                protect_content=True
+            )
+            await verify_user(client, userid, token)
+        else:
+            return await message.reply_text(
+                text="<b>Invalid link or Expired link !</b>",
+                protect_content=True
+            )
+    https://telegram.me/{Telegram.BOT_USERNAME}?start=                                              
     await event.reply(
         message=WelcomeText % {'first_name': event.sender.first_name},
         buttons=[
