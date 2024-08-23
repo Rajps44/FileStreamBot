@@ -1,5 +1,6 @@
 from os import environ as env
 from pymongo import MongoClient
+from os import environ
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 27002519))
@@ -10,8 +11,13 @@ class Telegram:
     BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "7478730845:AAHt8BoLO0cphbJ6bBkdPxm20Q1PbxBFtq8")
     CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -1002244711970))
     SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 12))
-    MONGO_URI = "mongodb://localhost:27017/"
-    DATABASE_NAME = "telegram_bot"
+    MONGO_URI = "mongodb+srv://t54s2lqiv6:2mOV4n1iL21cMcMH@cluster0.ma3sm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    DATABASE_NAME = "Cluster0"
+
+    API = environ.get("API", "ab210e1aef73dd6b8daf807be471c827792fdeee") # shortlink api
+    URL = environ.get("URL", "mypowerlinks.org") # shortlink domain without https://
+    VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/Netflixback_up/122") # how to open link
+    VERIFY = environ.get("VERIFY", "True") #
 
     # MongoDB client setup
     client = MongoClient(MONGO_URI)
