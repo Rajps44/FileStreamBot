@@ -11,6 +11,7 @@ from utils import verify_user, check_token
 @verify_user(private=True)
 async def welcome(event: NewMessage.Event | Message):
     user_id = event.sender_id
+    if not await check_verification(Telegram.db, user_id):
     data = message.command[1]
     if data.split("-", 1)[0] == "verify": # set if or elif it depend on your code
         userid = data.split("-", 2)[1]
@@ -31,8 +32,7 @@ async def welcome(event: NewMessage.Event | Message):
             return await message.reply_text(
                 text="<b>Invalid link or Expired link !</b>",
                 protect_content=True
-            )
-    https://telegram.me/{Telegram.BOT_USERNAME}?start=                                              
+            )                                              
     await event.reply(
         message=WelcomeText % {'first_name': event.sender.first_name},
         buttons=[
