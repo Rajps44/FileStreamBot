@@ -1,4 +1,5 @@
 from os import environ as env
+from pymongo import MongoClient
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 27002519))
@@ -9,6 +10,15 @@ class Telegram:
     BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "7478730845:AAHt8BoLO0cphbJ6bBkdPxm20Q1PbxBFtq8")
     CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -1002244711970))
     SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 12))
+    MONGO_URI = "mongodb://localhost:27017/"
+    DATABASE_NAME = "telegram_bot"
+
+    # MongoDB client setup
+    client = MongoClient(MONGO_URI)
+    db = client[DATABASE_NAME]
+
+    # Collection variables
+    users_collection = db['users']
 
 class Server:
     BASE_URL = env.get("BASE_URL", "http://127.0.0.1:8080")
