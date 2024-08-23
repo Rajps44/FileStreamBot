@@ -13,7 +13,7 @@ from utils import verify_user, check_token , check_verification, get_token
 async def welcome(event: NewMessage.Event | Message):
     user_id = event.sender_id
     if not await check_verification(Telegram.db, user_id):
-    if data = message.command[1]
+    data = message.command[1]
     if data.split("-", 1)[0] == "verify": # set if or elif it depend on your code
         userid = data.split("-", 2)[1]
         token = data.split("-", 3)[2]
