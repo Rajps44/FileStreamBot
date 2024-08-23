@@ -2,3 +2,5 @@ telethon
 cryptg
 quart
 uvicorn
+shortzy
+pytz
