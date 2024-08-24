@@ -1,5 +1,6 @@
 from os import environ as env
 from pymongo import MongoClient
+import logging
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 27002519))
@@ -14,12 +15,12 @@ class Telegram:
     DATABASE_NAME = env.get("DATABASE_NAME", "Cluster0")
 
     # Shortlink API and URL
-    API = env.get("API", "ab210e1aef73dd6b8daf807be471c827792fdeee")
-    URL = env.get("URL", "mypowerlinks.org")
+    API = env.get("API", "ab210e1aef73dd6b8daf807be471c827792fdeee")  # Shortlink API
+    URL = env.get("URL", "mypowerlinks.org")  # Shortlink domain without https://
 
     # Verification Settings
-    VERIFY_TUTORIAL = env.get("VERIFY_TUTORIAL", "https://t.me/Netflixback_up/122")
-    VERIFY = env.get("VERIFY", "True") == "True"
+    VERIFY_TUTORIAL = env.get("VERIFY_TUTORIAL", "https://t.me/Netflixback_up/122")  # How to open link
+    VERIFY = env.get("VERIFY", "True") == "True"  # Convert to boolean
 
     # MongoDB client setup
     client = MongoClient(MONGO_URI)
