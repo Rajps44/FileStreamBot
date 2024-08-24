@@ -1,6 +1,5 @@
 from os import environ as env
 from pymongo import MongoClient
-import logging
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 27002519))
