@@ -28,6 +28,7 @@ class Telegram:
     # Collection variables
     users_collection = db['users']
 
+
 class Server:
     BASE_URL = env.get("BASE_URL", "http://127.0.0.1:8080")
     BIND_ADDRESS = env.get("BIND_ADDRESS", "0.0.0.0")
