@@ -1,7 +1,7 @@
 from telethon import Button, events
 from telethon.tl.custom.message import Message
 from bot import TelegramBot
-from bot.config import Telegram, VERIFY, VERIFY_TUTORIAL, BOT_USERNAME
+from bot.config import Telegram  # Import the Telegram class
 from bot.modules.static import *
 from bot.modules.decorators import verify_user
 from utils import check_token, check_verification, get_token
@@ -38,7 +38,7 @@ async def welcome(event: Message):
         message=WelcomeText % {'first_name': event.sender.first_name},
         buttons=[
             [
-                Button.url('Add to Channel', f'https://t.me/{BOT_USERNAME}?startchannel&admin=post_messages+edit_messages+delete_messages')
+                Button.url('Add to Channel', f'https://t.me/{Telegram.BOT_USERNAME}?startchannel&admin=post_messages+edit_messages+delete_messages')
             ]
         ]
     )
@@ -49,11 +49,11 @@ async def welcome(event: Message):
 async def user_info(event: Message):
     await event.reply(UserInfoText.format(sender=event.sender))
 
-    if not await check_verification(Telegram.db, event.sender_id) and VERIFY:
+    if not await check_verification(Telegram.db, event.sender_id) and Telegram.VERIFY:  # Access Telegram.VERIFY
         btn = [
             [
-                Button.url("Verify", await get_token(Telegram.db, event.sender_id, f"https://telegram.me/{BOT_USERNAME}?start=")),
-                Button.url("How To Open Link & Verify", VERIFY_TUTORIAL)
+                Button.url("Verify", await get_token(Telegram.db, event.sender_id, f"https://telegram.me/{Telegram.BOT_USERNAME}?start=")),  # Access Telegram.BOT_USERNAME
+                Button.url("How To Open Link & Verify", Telegram.VERIFY_TUTORIAL)  # Access Telegram.VERIFY_TUTORIAL
             ]
         ]
         await event.reply(
