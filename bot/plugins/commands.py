@@ -1,15 +1,15 @@
-from telethon import Button
-from telethon.events import NewMessage
+from telethon import Button, events
 from telethon.tl.custom.message import Message
 from bot import TelegramBot
 from bot.config import Telegram, VERIFY, VERIFY_TUTORIAL, BOT_USERNAME
 from bot.modules.static import *
 from bot.modules.decorators import verify_user
-from utils import verify_user, check_token , check_verification, get_token
+from utils import check_token, check_verification, get_token
 
-@TelegramBot.on(NewMessage(incoming=True, pattern=r'^/start$'))
+# Handler for the /start command
+@TelegramBot.on(events.NewMessage(pattern=r'^/start$', incoming=True))
 @verify_user(private=True)
-async def welcome(event: NewMessage.Event | Message):
+async def welcome(event: Message):
     user_id = event.sender_id
     if not await check_verification(Telegram.db, user_id):
         data = event.text.split()[1]
@@ -18,19 +18,19 @@ async def welcome(event: NewMessage.Event | Message):
             token = data.split("-", 3)[2]
             if str(event.sender_id) != str(userid):
                 return await event.reply(
-                    text="<b>Invalid link or Expired link !</b>",
+                    text="<b>Invalid link or Expired link!</b>",
                     protect_content=True
                 )
             is_valid = await check_token(Telegram.db, userid, token)
             if is_valid:
                 await event.reply(
-                    text=f"<b>Hey {event.sender.first_name}, You are successfully verified !\nNow you have unlimited access for all files till today midnight.</b>",
+                    text=f"<b>Hey {event.sender.first_name}, You are successfully verified! Now you have unlimited access for all files till today midnight.</b>",
                     protect_content=True
                 )
                 await verify_user(Telegram.db, userid, token)
             else:
                 return await event.reply(
-                    text="<b>Invalid link or Expired link !</b>",
+                    text="<b>Invalid link or Expired link!</b>",
                     protect_content=True
                 )
 
@@ -38,29 +38,32 @@ async def welcome(event: NewMessage.Event | Message):
         message=WelcomeText % {'first_name': event.sender.first_name},
         buttons=[
             [
-                Button.url('Add to Channel', f'https://t.me/{Telegram.BOT_USERNAME}?startchannel&admin=post_messages+edit_messages+delete_messages')
+                Button.url('Add to Channel', f'https://t.me/{BOT_USERNAME}?startchannel&admin=post_messages+edit_messages+delete_messages')
             ]
         ]
     )
 
-@TelegramBot.on(NewMessage(incoming=True, pattern=r'^/info$'))
+# Handler for the /info command
+@TelegramBot.on(events.NewMessage(pattern=r'^/info$', incoming=True))
 @verify_user(private=True)
 async def user_info(event: Message):
     await event.reply(UserInfoText.format(sender=event.sender))
 
     if not await check_verification(Telegram.db, event.sender_id) and VERIFY:
-        btn = [[
-            InlineKeyboardButton("Verify", url=await get_token(Telegram.db, event.sender_id, f"https://telegram.me/{BOT_USERNAME}?start="))
-        ],[
-            InlineKeyboardButton("How To Open Link & Verify", url=VERIFY_TUTORIAL)
-        ]]
+        btn = [
+            [
+                Button.url("Verify", await get_token(Telegram.db, event.sender_id, f"https://telegram.me/{BOT_USERNAME}?start=")),
+                Button.url("How To Open Link & Verify", VERIFY_TUTORIAL)
+            ]
+        ]
         await event.reply(
-            text="<b>You are not verified !\nKindly verify to continue !</b>",
+            text="<b>You are not verified! Kindly verify to continue!</b>",
             protect_content=True,
-            reply_markup=InlineKeyboardMarkup(btn)
+            buttons=btn
         )
         return
 
-@TelegramBot.on(NewMessage(chats=Telegram.OWNER_ID, incoming=True, pattern=r'^/log$'))
-async def send_log(event: NewMessage.Event | Message):
+# Handler for the /log command
+@TelegramBot.on(events.NewMessage(chats=Telegram.OWNER_ID, pattern=r'^/log$', incoming=True))
+async def send_log(event: Message):
     await event.reply(file='event-log.txt')
