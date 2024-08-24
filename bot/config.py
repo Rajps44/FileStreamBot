@@ -7,7 +7,7 @@ class Telegram:
     OWNER_ID = int(env.get("OWNER_ID", 6508598835))
     ALLOWED_USER_IDS = env.get("ALLOWED_USER_IDS", "").split()
     BOT_USERNAME = env.get("TELEGRAM_BOT_USERNAME", "Netflixmovielakh_bot"))
-    BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "7478730845:AAHt8BoLO0cphbJ6bBkdPxm20Q1PbxBFtq8"))
+    BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "7478730845:AAHt8BoLO0cphbJ6bBkdPxm20Q1PbxBFtq8")
     CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -1002244711970))
     SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 12))
     MONGO_URI = env.get("MONGO_URI", "mongodb+srv://t54s2lqiv6:2mOV4n1iL21cMcMH@cluster0.ma3sm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"))
