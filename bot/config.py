@@ -3,7 +3,7 @@ from pymongo import MongoClient
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 27002519))
-    API_HASH = env.get("TELEGRAM_API_HASH", "1033ee721101d78366b4ac46aadf3930"))
+    API_HASH = env.get("TELEGRAM_API_HASH", "1033ee721101d78366b4ac46aadf3930")
     OWNER_ID = int(env.get("OWNER_ID", 6508598835))
     ALLOWED_USER_IDS = env.get("ALLOWED_USER_IDS", "").split()
     BOT_USERNAME = env.get("TELEGRAM_BOT_USERNAME", "Netflixmovielakh_bot"))
