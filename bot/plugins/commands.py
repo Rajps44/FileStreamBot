@@ -7,14 +7,13 @@ from bot.modules.static import *
 from bot.modules.decorators import verify_user
 from utils import verify_user, check_token , check_verification, get_token
 
-
 @TelegramBot.on(NewMessage(incoming=True, pattern=r'^/start$'))
 @verify_user(private=True)
 async def welcome(event: NewMessage.Event | Message):
     user_id = event.sender_id
     if not await check_verification(Telegram.db, user_id):
-        data = event.text.split()[1]  # Fixed: Use event.text instead of message.command
-        if data.split("-", 1)[0] == "verify":  # Ensure the data split is correct
+        data = event.text.split()[1]
+        if data.split("-", 1)[0] == "verify":
             userid = data.split("-", 2)[1]
             token = data.split("-", 3)[2]
             if str(event.sender_id) != str(userid):
@@ -25,7 +24,7 @@ async def welcome(event: NewMessage.Event | Message):
             is_valid = await check_token(Telegram.db, userid, token)
             if is_valid:
                 await event.reply(
-                    text=f"<b>Hey {event.sender.mention}, You are successfully verified !\nNow you have unlimited access for all files till today midnight.</b>",
+                    text=f"<b>Hey {event.sender.first_name}, You are successfully verified !\nNow you have unlimited access for all files till today midnight.</b>",
                     protect_content=True
                 )
                 await verify_user(Telegram.db, userid, token)
@@ -44,7 +43,6 @@ async def welcome(event: NewMessage.Event | Message):
         ]
     )
 
-
 @TelegramBot.on(NewMessage(incoming=True, pattern=r'^/info$'))
 @verify_user(private=True)
 async def user_info(event: Message):
@@ -62,7 +60,6 @@ async def user_info(event: Message):
             reply_markup=InlineKeyboardMarkup(btn)
         )
         return
-
 
 @TelegramBot.on(NewMessage(chats=Telegram.OWNER_ID, incoming=True, pattern=r'^/log$'))
 async def send_log(event: NewMessage.Event | Message):
